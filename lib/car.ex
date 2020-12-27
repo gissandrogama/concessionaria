@@ -8,25 +8,14 @@ defmodule Car do
     buscar(chassi, key)
   end
 
-  defp buscar(chassi, :novo) do
-    carros_novo()
-    |> Enum.find(fn carro -> carro.chassi == chassi end)
-  end
-
-  defp buscar(chassi, :seminovo) do
-    carros_seminovo()
-    |> Enum.find(fn carro -> carro.chassi == chassi end)
-  end
-
-  defp buscar(chassi, :all) do
-    carros()
-    |> Enum.find(fn carro -> carro.chassi == chassi end)
-  end
+  defp buscar(chassi, :novo), do: filter(carros_novo(), chassi)
+  defp buscar(chassi, :seminovo), do: filter(carros_seminovo(), chassi)
+  defp buscar(chassi, :all), do: filter(carros(), chassi)
+  defp filter(lista, chassi), do: Enum.find(lista, &(&1.chassi == chassi))
 
   def carros(), do: read(:novo) ++ read(:seminovo)
   def carros_novo(), do: read(:novo)
   def carros_seminovo(), do: read(:seminovo)
-
 
   def cadastrar(ano, marca, modelo, cambio, combustivel, cor, portas, chassi, tipo \\ :novo) do
     case buscar_carro(chassi) do
@@ -60,9 +49,13 @@ defmodule Car do
   end
 
   def read(tipo) do
-    {:ok, carros} = File.read(@car[tipo])
+    case File.read(@car[tipo]) do
+      {:ok, carros} ->
+        carros
+        |> :erlang.binary_to_term()
 
-    carros
-    |> :erlang.binary_to_term()
+      {:error, :enoent} ->
+        {:error, "Arquivo inválido"}
+    end
   end
 end
