@@ -57,4 +57,37 @@ defmodule CarTest do
                {:error, "Veículo já cadastrado"}
     end
   end
+
+  describe "Testes responsveis por bucar veículo" do
+    test "buscar veículo novo" do
+      Car.cadastrar("2020", "Fiat", "argo", "automatico", "gasolina", "preta", 4, "123456abc")
+
+      assert Car.buscar_carro("123456abc", :novo).modelo == "argo"
+    end
+
+    test "buscar seminovo" do
+      Car.cadastrar(
+        "2020",
+        "Fiat",
+        "palio",
+        "automatico",
+        "gasolina",
+        "preta",
+        4,
+        "123456abcd",
+        :seminovo
+      )
+
+      assert Car.buscar_carro("123456abcd", :seminovo).modelo == "palio"
+    end
+  end
+
+  describe "deletar" do
+    test "deve deletar um veículo" do
+      Car.cadastrar("2020", "Fiat", "argo", "automatico", "gasolina", "preta", 4, "123456abc")
+      Car.cadastrar("2020", "Fiat", "palio", "automatico", "gasolina", "preta", 4, "123456abcd")
+
+      assert Car.deletar("123456abc") == {:ok, "Veículo com o chassi: 123456abc deletado!"}
+    end
+  end
 end

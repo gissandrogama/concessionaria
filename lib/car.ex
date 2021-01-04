@@ -48,6 +48,12 @@ defmodule Car do
     File.write!(@car[tipo], lista_carro)
   end
 
+  def deletar(chassi) do
+    # veiculo = buscar_carro(chassi)
+    {:ok, "Veículo com o chassi: #{chassi} deletado!"}
+
+  end
+
   def read(tipo) do
     case File.read(@car[tipo]) do
       {:ok, carros} ->
