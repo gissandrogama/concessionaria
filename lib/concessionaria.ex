@@ -8,7 +8,7 @@ defmodule Concessionaria do
     File.write!("semi.txt", :erlang.term_to_binary([]))
   end
 
-  def cadastrar_carro(ano,  marca, modelo, cambio, combustivel, cor, portas, chassi, tipo) do
+  def cadastrar_carro(ano, marca, modelo, cambio, combustivel, cor, portas, chassi, tipo \\ :novo) do
     Car.cadastrar(ano, marca, modelo, cambio, combustivel, cor, portas, chassi, tipo)
   end
 end

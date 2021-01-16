@@ -1,9 +1,56 @@
 defmodule Car do
+  @moduledoc """
+    Modulo de `car`  para cadastro de tipos de veículos como `novo` e `semi-novo`
+
+    A função mais ultilizada e a função `cadastrar/9`
+  """
   @enforce_keys [:ano, :marca, :modelo, :chassi]
   defstruct [:ano, :marca, :modelo, :cambio, :combustivel, :cor, :portas, :chassi, :tipo]
 
   @car %{:novo => "novo.txt", :seminovo => "semi.txt"}
 
+  @doc """
+  Função que lista vaículos `novos`, `semi-novos` e também todos os veículo
+
+  ## Parametros da função
+
+  - chassi: numero que foi cadastrado para o assinante
+  - key: a chave que é um atom com o tipo de cliente: `:novo`, `:seminovo` ou `:all`
+
+  ## Informações adicionais
+
+  - Caso o parametro de tipo de veículo não for passo, será listado uma lista todos os tipos de clientes
+
+  ## Exemplo
+
+      iex> Car.cadastrar("2020", "Fiat", "Palio", "automatico", "gasolina", "preta", 4, "ABCD", :novo)
+      iex> Car.buscar_carro("ABCD", :novo)
+      %Car{
+          ano: "2020",
+          marca: "Fiat",
+          modelo: "Palio",
+          cambio: "automatico",
+          combustivel: "gasolina",
+          cor: "preta",
+          portas: 4,
+          chassi: "ABCD",
+          tipo: :novo
+          }
+
+      iex> Car.cadastrar("2019", "Fiat", "Palio", "automatico", "gasolina", "preta", 2, "ABCDE", :seminovo)
+      iex> Car.buscar_carro("ABCDE", :seminovo)
+      %Car{
+          ano: "2019",
+          marca: "Fiat",
+          modelo: "Palio",
+          cambio: "automatico",
+          combustivel: "gasolina",
+          cor: "preta",
+          portas: 2,
+          chassi: "ABCDE",
+          tipo: :seminovo
+          }
+  """
   def buscar_carro(chassi, key \\ :all) do
     buscar(chassi, key)
   end
@@ -13,10 +60,117 @@ defmodule Car do
   defp buscar(chassi, :all), do: filter(carros(), chassi)
   defp filter(lista, chassi), do: Enum.find(lista, &(&1.chassi == chassi))
 
+  @doc """
+  Função com aridade `0` que lista todos os veículos, tanto novos como seminovos
+
+  ## Exemplo
+
+
+      iex> Car.cadastrar("2020", "Fiat", "Palio", "automatico", "gasolina", "preta", 4, "ABCD", :novo)
+      iex> Car.cadastrar("2019", "Fiat", "Palio", "automatico", "gasolina", "preta", 2, "ABCDE", :seminovo)
+      iex> Car.carros()
+      [
+         %Car{
+          ano: "2020",
+          marca: "Fiat",
+          modelo: "Palio",
+          cambio: "automatico",
+          combustivel: "gasolina",
+          cor: "preta",
+          portas: 4,
+          chassi: "ABCD",
+          tipo: :novo
+          },
+         %Car{
+          ano: "2019",
+          marca: "Fiat",
+          modelo: "Palio",
+          cambio: "automatico",
+          combustivel: "gasolina",
+          cor: "preta",
+          portas: 2,
+          chassi: "ABCDE",
+          tipo: :seminovo
+          }
+      ]
+  """
   def carros(), do: read(:novo) ++ read(:seminovo)
+
+  @doc """
+  Função com aridade `0` que lista todos os veículos novos
+
+  ## Exemplo
+
+
+      iex> Car.cadastrar("2020", "Fiat", "Palio", "automatico", "gasolina", "preta", 4, "ABCD", :novo)
+      iex> Car.cadastrar("2019", "Fiat", "Palio", "automatico", "gasolina", "preta", 2, "ABCDE", :seminovo)
+      iex> Car.carros_novo()
+      [
+        %Car{
+          ano: "2020",
+          marca: "Fiat",
+          modelo: "Palio",
+          cambio: "automatico",
+          combustivel: "gasolina",
+          cor: "preta",
+          portas: 4,
+          chassi: "ABCD",
+          tipo: :novo
+          }
+      ]
+  """
   def carros_novo(), do: read(:novo)
+
+  @doc """
+  Função com aridade `0` que lista todos os veículos seminovos
+
+  ## Exemplo
+
+
+      iex> Car.cadastrar("2020", "Fiat", "Palio", "automatico", "gasolina", "preta", 4, "ABCD", :novo)
+      iex> Car.cadastrar("2019", "Fiat", "Palio", "automatico", "gasolina", "preta", 2, "ABCDE", :seminovo)
+      iex> Car.carros_seminovo()
+      [
+        %Car{
+          ano: "2019",
+          marca: "Fiat",
+          modelo: "Palio",
+          cambio: "automatico",
+          combustivel: "gasolina",
+          cor: "preta",
+          portas: 2,
+          chassi: "ABCDE",
+          tipo: :seminovo
+          }
+      ]
+  """
   def carros_seminovo(), do: read(:seminovo)
 
+  @doc """
+  Função para cadastrar vaículos `novo` ou `seminovo`
+
+  ## Parametos da função
+
+  - ano: ano de fabricação do veículo
+  - marca: qual fabricante do veículo, exemplo: Ford
+  - modelo: modelo do veículo, exemplo: Fiesta
+  - cambio: tipo de cambio do veículo automatico ou manual
+  - combustivel: tipo de combustivel ultilizado pelo veículo
+  - cor: cor que predomina no veículo
+  - portas: quantidade de portatas
+  - chassi: indentificação do veículo chassi
+  - tipo: `veículo` novo ou `seminovo`
+
+  ## informações adicionais
+
+  - Caso o chassi já exista, será retornado um erro.
+
+  ## Exemplo
+
+
+      iex> Car.cadastrar("2019", "Fiat", "Palio", "automatico", "gasolina", "preta", 2, "ABCDE", :seminovo)
+      {:ok, "Veículo com chassi ABCDE, cadastrado com sucesso!"}
+  """
   def cadastrar(ano, marca, modelo, cambio, combustivel, cor, portas, chassi, tipo \\ :novo) do
     case buscar_carro(chassi) do
       nil ->
@@ -51,7 +205,6 @@ defmodule Car do
   def deletar(chassi) do
     # veiculo = buscar_carro(chassi)
     {:ok, "Veículo com o chassi: #{chassi} deletado!"}
-
   end
 
   def read(tipo) do

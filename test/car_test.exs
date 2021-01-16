@@ -27,7 +27,7 @@ defmodule CarTest do
              }
     end
 
-    test "criar uma conta prepago" do
+    test "criar um veículo" do
       assert Car.cadastrar(
                "2020",
                "Fiat",
