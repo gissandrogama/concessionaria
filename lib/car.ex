@@ -203,8 +203,14 @@ defmodule Car do
   end
 
   def deletar(chassi) do
-    # veiculo = buscar_carro(chassi)
-    {:ok, "Veículo com o chassi: #{chassi} deletado!"}
+    veiculo = buscar_carro(chassi)
+
+    result_delete = carros()
+    |> List.delete(veiculo)
+    |> :erlang.term_to_binary()
+    |> write(veiculo.tipo)
+
+    {result_delete, "Veículo com o chassi: #{veiculo.chassi} deletado!"}
   end
 
   def read(tipo) do
