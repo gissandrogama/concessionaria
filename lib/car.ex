@@ -34,7 +34,7 @@ defmodule Car do
           cor: "preta",
           portas: 4,
           chassi: "ABCD",
-          tipo: :novo
+          tipo: %Novo{data: nil, valor: nil, vendido: false}
           }
 
       iex> Car.cadastrar("2019", "Fiat", "Palio", "automatico", "gasolina", "preta", 2, "ABCDE", :seminovo)
@@ -48,7 +48,7 @@ defmodule Car do
           cor: "preta",
           portas: 2,
           chassi: "ABCDE",
-          tipo: :seminovo
+          tipo: %Seminovo{data: nil, valor: nil, vendido: false}
           }
   """
   def buscar_carro(chassi, key \\ :all) do
@@ -79,7 +79,7 @@ defmodule Car do
           cor: "preta",
           portas: 4,
           chassi: "ABCD",
-          tipo: :novo
+          tipo: %Novo{data: nil, valor: nil, vendido: false}
           },
          %Car{
           ano: "2019",
@@ -90,7 +90,7 @@ defmodule Car do
           cor: "preta",
           portas: 2,
           chassi: "ABCDE",
-          tipo: :seminovo
+          tipo: %Seminovo{data: nil, valor: nil, vendido: false}
           }
       ]
   """
@@ -115,7 +115,7 @@ defmodule Car do
           cor: "preta",
           portas: 4,
           chassi: "ABCD",
-          tipo: :novo
+          tipo: %Novo{data: nil, valor: nil, vendido: false}
           }
       ]
   """
@@ -140,7 +140,7 @@ defmodule Car do
           cor: "preta",
           portas: 2,
           chassi: "ABCDE",
-          tipo: :seminovo
+          tipo: %Seminovo{data: nil, valor: nil, vendido: false}
           }
       ]
   """
@@ -171,30 +171,42 @@ defmodule Car do
       iex> Car.cadastrar("2019", "Fiat", "Palio", "automatico", "gasolina", "preta", 2, "ABCDE", :seminovo)
       {:ok, "Veículo com chassi ABCDE, cadastrado com sucesso!"}
   """
-  def cadastrar(ano, marca, modelo, cambio, combustivel, cor, portas, chassi, tipo \\ :novo) do
+  def cadastrar(ano, marca, modelo, cambio, combustivel, cor, portas, chassi, :novo),
+    do: cadastrar(ano, marca, modelo, cambio, combustivel, cor, portas, chassi, %Novo{})
+
+  def cadastrar(ano, marca, modelo, cambio, combustivel, cor, portas, chassi, :seminovo),
+    do: cadastrar(ano, marca, modelo, cambio, combustivel, cor, portas, chassi, %Seminovo{})
+
+  def cadastrar(ano, marca, modelo, cambio, combustivel, cor, portas, chassi, tipo) do
     case buscar_carro(chassi) do
       nil ->
-        (read(tipo) ++
-           [
-             %__MODULE__{
-               ano: ano,
-               marca: marca,
-               modelo: modelo,
-               cambio: cambio,
-               combustivel: combustivel,
-               cor: cor,
-               portas: portas,
-               chassi: chassi,
-               tipo: tipo
-             }
-           ])
+        carro = %__MODULE__{
+          ano: ano,
+          marca: marca,
+          modelo: modelo,
+          cambio: cambio,
+          combustivel: combustivel,
+          cor: cor,
+          portas: portas,
+          chassi: chassi,
+          tipo: tipo
+        }
+
+        (read(valida_carro(carro)) ++ [carro])
         |> :erlang.term_to_binary()
-        |> write(tipo)
+        |> write(valida_carro(carro))
 
         {:ok, "Veículo com chassi #{chassi}, cadastrado com sucesso!"}
 
       _carro ->
         {:error, "Veículo já cadastrado"}
+    end
+  end
+
+  defp valida_carro(carro) do
+    case carro.tipo.__struct__ == Novo do
+      true -> :novo
+      false -> :seminovo
     end
   end
 
@@ -205,10 +217,11 @@ defmodule Car do
   def deletar(chassi) do
     veiculo = buscar_carro(chassi)
 
-    result_delete = carros()
-    |> List.delete(veiculo)
-    |> :erlang.term_to_binary()
-    |> write(veiculo.tipo)
+    result_delete =
+      carros()
+      |> List.delete(veiculo)
+      |> :erlang.term_to_binary()
+      |> write(veiculo.tipo)
 
     {result_delete, "Veículo com o chassi: #{veiculo.chassi} deletado!"}
   end
