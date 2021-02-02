@@ -1,14 +1,25 @@
 defmodule Novo do
-
-  defstruct data: nil, valor: nil, vendido: false
+  defstruct comprado: false, vendido: false
 
   def compra(chassi, data, valor) do
-    
-    {:ok, "Compra do veículo #{chassi} cadastrada!"}
+    {carro, tipo} = carro_tipo(chassi)
+    tipo = %__MODULE__{tipo | comprado: true}
+    carro = %Car{carro | tipo: tipo}
 
+    {:ok, "Compra do veículo #{carro.chassi} cadastrada!"}
   end
 
   def venda(chassi, data, valor) do
-    {:ok, "Venda do veículo #{chassi} cadastrada!"}
+    {carro, tipo} = carro_tipo(chassi)
+    tipo = %__MODULE__{tipo | vendido: true}
+    carro = %Car{carro | tipo: tipo}
+    {:ok, "Venda do veículo #{carro.chassi} cadastrada!"}
+  end
+
+  defp carro_tipo(chassi) do
+    carro = Car.buscar_carro(chassi, :novo)
+    tipo = carro.tipo
+
+    {carro, tipo}
   end
 end

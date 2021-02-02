@@ -34,7 +34,7 @@ defmodule Car do
           cor: "preta",
           portas: 4,
           chassi: "ABCD",
-          tipo: %Novo{data: nil, valor: nil, vendido: false}
+          tipo: %Novo{comprado: false, vendido: false}
           }
 
       iex> Car.cadastrar("2019", "Fiat", "Palio", "automatico", "gasolina", "preta", 2, "ABCDE", :seminovo)
@@ -48,7 +48,7 @@ defmodule Car do
           cor: "preta",
           portas: 2,
           chassi: "ABCDE",
-          tipo: %Seminovo{data: nil, valor: nil, vendido: false}
+          tipo: %Seminovo{comprado: false, vendido: false}
           }
   """
   def buscar_carro(chassi, key \\ :all) do
@@ -79,7 +79,7 @@ defmodule Car do
           cor: "preta",
           portas: 4,
           chassi: "ABCD",
-          tipo: %Novo{data: nil, valor: nil, vendido: false}
+          tipo: %Novo{comprado: false, vendido: false}
           },
          %Car{
           ano: "2019",
@@ -90,7 +90,7 @@ defmodule Car do
           cor: "preta",
           portas: 2,
           chassi: "ABCDE",
-          tipo: %Seminovo{data: nil, valor: nil, vendido: false}
+          tipo: %Seminovo{comprado: false, vendido: false}
           }
       ]
   """
@@ -115,7 +115,7 @@ defmodule Car do
           cor: "preta",
           portas: 4,
           chassi: "ABCD",
-          tipo: %Novo{data: nil, valor: nil, vendido: false}
+          tipo: %Novo{comprado: false, vendido: false}
           }
       ]
   """
@@ -140,7 +140,7 @@ defmodule Car do
           cor: "preta",
           portas: 2,
           chassi: "ABCDE",
-          tipo: %Seminovo{data: nil, valor: nil, vendido: false}
+          tipo: %Seminovo{comprado: false, vendido: false}
           }
       ]
   """
