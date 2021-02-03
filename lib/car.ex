@@ -5,7 +5,7 @@ defmodule Car do
     A função mais ultilizada e a função `cadastrar/9`
   """
   @enforce_keys [:ano, :marca, :modelo, :chassi]
-  defstruct [:ano, :marca, :modelo, :cambio, :combustivel, :cor, :portas, :chassi, :tipo]
+  defstruct [:ano, :marca, :modelo, :cambio, :combustivel, :cor, :portas, :chassi, :tipo, registros: []]
 
   @car %{:novo => "novo.txt", :seminovo => "semi.txt"}
 
@@ -45,9 +45,7 @@ defmodule Car do
           modelo: "Palio",
           cambio: "automatico",
           combustivel: "gasolina",
-          cor: "preta",
-          portas: 2,
-          chassi: "ABCDE",
+          cor: "preta",chassi
           tipo: %Seminovo{comprado: false, vendido: false}
           }
   """
