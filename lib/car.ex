@@ -5,7 +5,18 @@ defmodule Car do
     A função mais ultilizada e a função `cadastrar/9`
   """
   @enforce_keys [:ano, :marca, :modelo, :chassi]
-  defstruct [:ano, :marca, :modelo, :cambio, :combustivel, :cor, :portas, :chassi, :tipo, registros: []]
+  defstruct [
+    :ano,
+    :marca,
+    :modelo,
+    :cambio,
+    :combustivel,
+    :cor,
+    :portas,
+    :chassi,
+    :tipo,
+    registros: []
+  ]
 
   @car %{:novo => "novo.txt", :seminovo => "semi.txt"}
 
@@ -201,6 +212,20 @@ defmodule Car do
     end
   end
 
+  def atualizar(chassi, carro) do
+    {veiculo_antigo, nova_lista} = deletar_veículo(chassi)
+
+    case carro.tipo.__struct__ == veiculo_antigo.tipo.__struct__ do
+      true ->
+        (nova_lista ++ [carro])
+        |> :erlang.term_to_binary()
+        |> write(valida_carro(carro))
+
+      false ->
+        {:error, "Veículo não pode ter o tipo alterado."}
+    end
+  end
+
   defp valida_carro(carro) do
     case carro.tipo.__struct__ == Novo do
       true -> :novo
@@ -213,15 +238,23 @@ defmodule Car do
   end
 
   def deletar(chassi) do
+    {veiculo, nova_lista} = deletar_veículo(chassi)
+
+    nova_lista
+    |> :erlang.term_to_binary()
+    |> write(veiculo.tipo)
+
+    {nova_lista, "Veículo com o chassi: #{veiculo.chassi} deletado!"}
+  end
+
+  def deletar_veículo(chassi) do
     veiculo = buscar_carro(chassi)
 
-    result_delete =
-      carros()
+    nova_lista =
+      read(valida_carro(veiculo))
       |> List.delete(veiculo)
-      |> :erlang.term_to_binary()
-      |> write(veiculo.tipo)
 
-    {result_delete, "Veículo com o chassi: #{veiculo.chassi} deletado!"}
+    {veiculo, nova_lista}
   end
 
   def read(tipo) do
