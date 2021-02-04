@@ -52,11 +52,14 @@ defmodule Car do
       iex> Car.buscar_carro("ABCDE", :seminovo)
       %Car{
           ano: "2019",
+          cambio: "automatico",
+          chassi: "ABCDE",
+          combustivel: "gasolina",
+          cor: "preta",
           marca: "Fiat",
           modelo: "Palio",
-          cambio: "automatico",
-          combustivel: "gasolina",
-          cor: "preta",chassi
+          portas: 2,
+          registros: [],
           tipo: %Seminovo{comprado: false, vendido: false}
           }
   """
@@ -244,7 +247,7 @@ defmodule Car do
     |> :erlang.term_to_binary()
     |> write(veiculo.tipo)
 
-    {nova_lista, "Veículo com o chassi: #{veiculo.chassi} deletado!"}
+    {:ok, "Veículo com o chassi: #{veiculo.chassi} deletado!"}
   end
 
   def deletar_veículo(chassi) do

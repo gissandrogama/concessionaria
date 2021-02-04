@@ -4,7 +4,9 @@ defmodule Novo do
   def compra(chassi, data, valor) do
     {carro, tipo} = carro_tipo(chassi)
     tipo = %__MODULE__{tipo | comprado: true}
-    carro = %Car{carro | tipo: tipo}
+
+    %Car{carro | tipo: tipo}
+    |> Caixa.registro(data, valor)
 
     {:ok, "Compra do veículo #{carro.chassi} cadastrada!"}
   end
@@ -12,7 +14,10 @@ defmodule Novo do
   def venda(chassi, data, valor) do
     {carro, tipo} = carro_tipo(chassi)
     tipo = %__MODULE__{tipo | vendido: true}
-    carro = %Car{carro | tipo: tipo}
+
+    %Car{carro | tipo: tipo}
+    |> Caixa.registro(data, valor)
+
     {:ok, "Venda do veículo #{carro.chassi} cadastrada!"}
   end
 
