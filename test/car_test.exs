@@ -43,7 +43,17 @@ defmodule CarTest do
     end
 
     test "deve retorna erro dizendo que veículo ja esta cadastrado" do
-      Car.cadastrar("2020", "Fiat", "argo", "automatico", "gasolina", "preta", 4, "123456abc", :novo)
+      Car.cadastrar(
+        "2020",
+        "Fiat",
+        "argo",
+        "automatico",
+        "gasolina",
+        "preta",
+        4,
+        "123456abc",
+        :novo
+      )
 
       assert Car.cadastrar(
                "2020",
@@ -62,7 +72,17 @@ defmodule CarTest do
 
   describe "Testes responsveis por bucar veículo" do
     test "buscar veículo novo" do
-      Car.cadastrar("2020", "Fiat", "argo", "automatico", "gasolina", "preta", 4, "123456abc", :novo)
+      Car.cadastrar(
+        "2020",
+        "Fiat",
+        "argo",
+        "automatico",
+        "gasolina",
+        "preta",
+        4,
+        "123456abc",
+        :novo
+      )
 
       assert Car.buscar_carro("123456abc", :novo).modelo == "argo"
       assert Car.buscar_carro("123456abc", :novo).tipo.__struct__ == Novo
@@ -87,8 +107,29 @@ defmodule CarTest do
 
   describe "deletar" do
     test "deve deletar um veículo" do
-      Car.cadastrar("2020", "Fiat", "argo", "automatico", "gasolina", "preta", 4, "123456abc", :novo)
-      Car.cadastrar("2020", "Fiat", "palio", "automatico", "gasolina", "preta", 4, "123456abcd", :seminovo)
+      Car.cadastrar(
+        "2020",
+        "Fiat",
+        "argo",
+        "automatico",
+        "gasolina",
+        "preta",
+        4,
+        "123456abc",
+        :novo
+      )
+
+      Car.cadastrar(
+        "2020",
+        "Fiat",
+        "palio",
+        "automatico",
+        "gasolina",
+        "preta",
+        4,
+        "123456abcd",
+        :seminovo
+      )
 
       assert Car.deletar("123456abc") == {:ok, "Veículo com o chassi: 123456abc deletado!"}
     end

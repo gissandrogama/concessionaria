@@ -28,6 +28,10 @@ defmodule NovoTest do
 
       assert Novo.compra("123456abc", DateTime.utc_now(), 30000) ==
                {:ok, "Compra do veículo 123456abc cadastrada!"}
+
+      carro = Car.buscar_carro("123456abc", :novo)
+      registro = carro.registros
+      assert Enum.count(registro) == 1
     end
 
     test "cadastro de venda de um veículo novo" do
@@ -43,8 +47,14 @@ defmodule NovoTest do
         :novo
       )
 
+      Novo.compra("123456abc", DateTime.utc_now(), 30000)
+
       assert Novo.venda("123456abc", DateTime.utc_now(), 50000) ==
                {:ok, "Venda do veículo 123456abc cadastrada!"}
+
+      carro = Car.buscar_carro("123456abc", :novo)
+      registro = carro.registros
+      assert Enum.count(registro) == 2
     end
   end
 end

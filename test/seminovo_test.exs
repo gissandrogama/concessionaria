@@ -28,6 +28,10 @@ defmodule SeminovoTest do
 
       assert Seminovo.compra("123456abc", DateTime.utc_now(), 30000) ==
                {:ok, "Compra do seminovo 123456abc cadastrada!"}
+
+      carro = Car.buscar_carro("123456abc", :seminovo)
+      registro = carro.registros
+      assert Enum.count(registro) == 1
     end
 
     test "cadastro de venda de um veículo seminovo" do
@@ -43,8 +47,14 @@ defmodule SeminovoTest do
         :seminovo
       )
 
+      Seminovo.compra("123456abc", DateTime.utc_now(), 30000)
+
       assert Seminovo.venda("123456abc", DateTime.utc_now(), 50000) ==
                {:ok, "Venda do seminovo 123456abc cadastrada!"}
+
+      carro = Car.buscar_carro("123456abc", :seminovo)
+      registro = carro.registros
+      assert Enum.count(registro) == 2
     end
   end
 end
