@@ -21,6 +21,10 @@ defmodule Novo do
     {:ok, "Venda do veículo #{carro.chassi} cadastrada!"}
   end
 
+  def relatorio(mes, ano) do
+    Relatorio.imprimir(mes, ano)
+  end
+
   defp carro_tipo(chassi) do
     carro = Car.buscar_carro(chassi, :novo)
     tipo = carro.tipo
