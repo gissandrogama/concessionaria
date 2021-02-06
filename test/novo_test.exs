@@ -96,7 +96,7 @@ defmodule NovoTest do
 
       relatorio = Novo.relatorio(data.month, data.year)
 
-      assert relatorio == ""
+      assert Enum.count(relatorio) == 1
     end
   end
 end
