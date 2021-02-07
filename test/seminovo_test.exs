@@ -92,7 +92,7 @@ defmodule SeminovoTest do
 
       carro = Car.carros_seminovo()
 
-      assert Enum.map(carro, &(&1.registros)) |> Enum.count() == 2
+      assert Enum.map(carro, & &1.registros) |> Enum.count() == 2
 
       relatorio = Seminovo.relatorio(data.month, data.year)
 

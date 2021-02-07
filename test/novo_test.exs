@@ -92,7 +92,7 @@ defmodule NovoTest do
 
       carro = Car.carros_novo()
 
-      assert Enum.map(carro, &(&1.registros)) |> Enum.count() == 2
+      assert Enum.map(carro, & &1.registros) |> Enum.count() == 2
 
       relatorio = Novo.relatorio(data.month, data.year)
 

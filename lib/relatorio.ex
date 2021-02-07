@@ -12,6 +12,7 @@ defmodule Relatorio do
         |> Enum.filter(fn carro ->
           carro.tipo.comprado == true
         end)
+
       :seminovo ->
         Car.carros_seminovo()
         |> Enum.filter(fn carro ->
