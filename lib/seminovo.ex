@@ -21,6 +21,10 @@ defmodule Seminovo do
     {:ok, "Venda do seminovo #{carro.chassi} cadastrada!"}
   end
 
+  def relatorio(mes, ano) do
+    Relatorio.imprimir(mes, ano, :seminovo)
+  end
+
   defp carro_tipo(chassi) do
     carro = Car.buscar_carro(chassi, :seminovo)
     tipo = carro.tipo

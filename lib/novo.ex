@@ -22,7 +22,7 @@ defmodule Novo do
   end
 
   def relatorio(mes, ano) do
-    Relatorio.imprimir(mes, ano)
+    Relatorio.imprimir(mes, ano, :novo)
   end
 
   defp carro_tipo(chassi) do
