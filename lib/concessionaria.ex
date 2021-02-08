@@ -33,6 +33,5 @@ defmodule Concessionaria do
   end
 
   def imprimir_relatorio() do
-    
   end
 end
