@@ -3,15 +3,31 @@ defmodule Concessionaria do
   Documentation for `Concessionaria`.
   """
 
+  @doc """
+  Função cria arquivos vazios `novo.txt` e `semi.txt`, nesses arquivos são gravadas os dados
+  de veículos novos e seminovos.
+
+  ## Exemplo
+
+      iex> start()
+      :ok
+  """
   def start do
     File.write!("novo.txt", :erlang.term_to_binary([]))
     File.write!("semi.txt", :erlang.term_to_binary([]))
   end
 
+  @doc """
+  Essa função é um parser para a função `Car.cadastrar/9`.
+  """
   def cadastrar_carro(ano, marca, modelo, cambio, combustivel, cor, portas, chassi, tipo) do
     Car.cadastrar(ano, marca, modelo, cambio, combustivel, cor, portas, chassi, tipo)
   end
 
+  @doc """
+  Essa função é um parser para as funções `Novo.compra/3` ou `Seminovo.compra/3`. Depende do tipo
+  que é passado como parametro.
+  """
   def comprar(chassi, data, valor, tipo) do
     case tipo do
       :novo ->
@@ -22,6 +38,10 @@ defmodule Concessionaria do
     end
   end
 
+  @doc """
+  Essa função é um parser para as funções `Novo.venda/3` ou `Seminovo.venda/3`. Depende do tipo
+  que é passado como parametro.
+  """
   def vender(chassi, data, valor, tipo) do
     case tipo do
       :novo ->
@@ -32,6 +52,14 @@ defmodule Concessionaria do
     end
   end
 
+  @doc """
+  Essa função é resposável por imprimir relatório de compra e venda de veículos.
+
+  ## Parametos da função
+
+  - mes: mes que deseja listar compras e vendas
+  - ano: ano que deseja listar compras e vendas
+  """
   def imprimir_relatorio(mes, ano) do
     {comprados, vendidos} = Novo.relatorio(mes, ano)
     valor_compra = process_valor_compra(comprados)
@@ -50,6 +78,7 @@ defmodule Concessionaria do
       IO.puts("Valor da compra: #{List.first(veiculo.registros).valor}")
       IO.puts("------------------------------------------------------------")
     end)
+
     IO.puts("Valor total de compras: #{Enum.sum(valor_compra)}")
     IO.puts("**************************Fim relatório compras**********************************")
 
@@ -66,6 +95,7 @@ defmodule Concessionaria do
       IO.puts("Valor da compra: #{List.first(veiculo.registros).valor}")
       IO.puts("------------------------------------------------------------")
     end)
+
     IO.puts("Valor total de compras: #{Enum.sum(valor_venda)}")
     IO.puts("**************************Fim relatório vendas**********************************")
   end
