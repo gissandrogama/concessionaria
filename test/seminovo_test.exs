@@ -94,9 +94,49 @@ defmodule SeminovoTest do
 
       assert Enum.map(carro, & &1.registros) |> Enum.count() == 2
 
-      relatorio = Seminovo.relatorio(data.month, data.year)
+      {compra, _venda} = Seminovo.relatorio(data.month, data.year)
 
-      assert Enum.count(relatorio) == 1
+      assert Enum.count(compra) == 1
+    end
+
+    test "relatório de venda de carros novos filtro mês e ano" do
+      Car.cadastrar(
+        "2021",
+        "Fiat",
+        "argo",
+        "automatico",
+        "gasolina",
+        "preta",
+        4,
+        "123456abc",
+        :seminovo
+      )
+
+      Car.cadastrar(
+        "2021",
+        "Fiat",
+        "palio",
+        "automatico",
+        "gasolina",
+        "preta",
+        4,
+        "123456abcd",
+        :seminovo
+      )
+
+      data_antiga = ~U[2021-01-04 23:16:24.136051Z]
+      data = DateTime.utc_now()
+
+      Seminovo.venda("123456abc", data_antiga, 8000)
+      Seminovo.venda("123456abcd", data, 8000)
+
+      carro = Car.carros_seminovo()
+
+      assert Enum.map(carro, & &1.registros) |> Enum.count() == 2
+
+      {_compra, venda} = Seminovo.relatorio(data.month, data.year)
+
+      assert Enum.count(venda) == 1
     end
   end
 end

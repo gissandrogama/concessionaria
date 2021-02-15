@@ -32,6 +32,62 @@ defmodule Concessionaria do
     end
   end
 
-  def imprimir_relatorio() do
+  def imprimir_relatorio(mes, ano) do
+    {comprados, vendidos} = Novo.relatorio(mes, ano)
+    valor_compra = process_valor_compra(comprados)
+    valor_venda = process_valor_venda(vendidos)
+
+    IO.puts("*************************************************************")
+    IO.puts("Relatório de comparas de veículos novos")
+    IO.puts("*************************************************************")
+
+    comprados
+    |> Enum.each(fn veiculo ->
+      IO.puts("Maca do veículo: #{veiculo.marca}")
+      IO.puts("Modelo do veículo: #{veiculo.modelo}")
+      IO.puts("Chassi do veículo: #{veiculo.chassi}")
+      IO.puts("Data da compra: #{List.first(veiculo.registros).data}")
+      IO.puts("Valor da compra: #{List.first(veiculo.registros).valor}")
+      IO.puts("------------------------------------------------------------")
+    end)
+    IO.puts("Valor total de compras: #{Enum.sum(valor_compra)}")
+    IO.puts("**************************Fim relatório compras**********************************")
+
+    IO.puts("*************************************************************")
+    IO.puts("Relatório de vendas de veículos novos")
+    IO.puts("*************************************************************")
+
+    vendidos
+    |> Enum.each(fn veiculo ->
+      IO.puts("Maca do veículo: #{veiculo.marca}")
+      IO.puts("Modelo do veículo: #{veiculo.modelo}")
+      IO.puts("Chassi do veículo: #{veiculo.chassi}")
+      IO.puts("Data da compra: #{List.first(veiculo.registros).data}")
+      IO.puts("Valor da compra: #{List.first(veiculo.registros).valor}")
+      IO.puts("------------------------------------------------------------")
+    end)
+    IO.puts("Valor total de compras: #{Enum.sum(valor_venda)}")
+    IO.puts("**************************Fim relatório vendas**********************************")
+  end
+
+  defp process_valor_compra(relatorio) do
+    relatorio
+    |> Enum.map(fn veiculo ->
+      case Enum.count(veiculo.registros) do
+        2 -> List.first(veiculo.registros)
+        1 -> List.first(veiculo.registros)
+      end
+    end)
+    |> Enum.map(& &1.valor)
+  end
+
+  defp process_valor_venda(relatorio) do
+    relatorio
+    |> Enum.map(fn veiculo ->
+      case Enum.count(veiculo.registros) do
+        2 -> List.last(veiculo.registros)
+      end
+    end)
+    |> Enum.map(& &1.valor)
   end
 end
